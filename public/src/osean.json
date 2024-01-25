@@ -1,0 +1,24 @@
+{
+    "name": "PancakeSwap Extended",
+    "timestamp": "2023-05-08T04:35:02.814Z",
+    "version": {
+      "major": 2,
+      "minor": 16,
+      "patch": 140
+    },
+    "logoURI": "https://osean.online/osean200.png",
+    "keywords": [
+      "pancakeswap",
+      "extended"
+    ],
+    "tokens": [
+      {
+        "name": "OSEAN",
+        "symbol": "OSEAN",
+        "address": "0x722cB8e411D40942C0f581B919ecCE3E4D759602",
+        "chainId": 56,
+        "decimals": 18,
+        "logoURI": "https://osean.online/osean200.png"
+      }
+    ]
+}

@@ -1,108 +1,101 @@
-import { ConnectWallet } from "@thirdweb-dev/react";
-import styles from "../styles/Home.module.css";
-import Image from "next/image";
-import { NextPage } from "next";
+import { Container, Button, Flex, SimpleGrid, ChakraProvider, Card, FormControl, Box, Input, FormLabel, Text, Select, Image } from "@chakra-ui/react";
+import { useAddress } from "@thirdweb-dev/react";
+import type { NextPage } from "next";
+import React, {useContext} from "react";
+import { OseanHeaderLinks } from "../components/oseanHeader";
+import ChainContext from "../cost/chain";
+import { Loading } from "./loading"
+import Link from "next/link";
+import BridgeVault from "../components/bridgeVault";
+
 
 const Home: NextPage = () => {
-  return (
-    <main className={styles.main}>
-      <div className={styles.container}>
-        <div className={styles.header}>
-          <h1 className={styles.title}>
-            Welcome to{" "}
-            <span className={styles.gradientText0}>
-              <a
-                href="https://thirdweb.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                thirdweb.
-              </a>
-            </span>
-          </h1>
+  const address = useAddress();
 
-          <p className={styles.description}>
-            Get started by configuring your desired network in{" "}
-            <code className={styles.code}>src/index.js</code>, then modify the{" "}
-            <code className={styles.code}>src/App.js</code> file!
-          </p>
+  const [loading, setLoading] = React.useState(true);
+  const { selectedChain, setSelectedChain } = useContext(ChainContext);
 
-          <div className={styles.connect}>
-            <ConnectWallet
-              dropdownPosition={{
-                side: "bottom",
-                align: "center",
-              }}
-            />
+  React.useEffect(() => {
+    setTimeout(() => setLoading(false), 1500);
+  }, []);
+
+  if (loading) {
+    return (
+    <div>
+    <OseanHeaderLinks />
+    <Loading />
+    </div> 
+    )
+  }
+
+ /* if (!address) {
+    return (
+      <Container maxW={"1200px"}>
+        <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
+          <div>
+            <h1>Please Connect a Wallet</h1>
           </div>
-        </div>
+        </Flex>
+      </Container>
+    );
+  } */
+  
 
-        <div className={styles.grid}>
-          <a
-            href="https://portal.thirdweb.com/"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="/images/portal-preview.png"
-              alt="Placeholder preview of starter"
-              width={300}
-              height={200}
-            />
-            <div className={styles.cardText}>
-              <h2 className={styles.gradientText1}>Portal ➜</h2>
-              <p>
-                Guides, references, and resources that will help you build with
-                thirdweb.
-              </p>
-            </div>
-          </a>
+  return (
+    <Container maxW={"100%"}>
 
-          <a
-            href="https://thirdweb.com/dashboard"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="/images/dashboard-preview.png"
-              alt="Placeholder preview of starter"
-              width={300}
-              height={200}
-            />
-            <div className={styles.cardText}>
-              <h2 className={styles.gradientText2}>Dashboard ➜</h2>
-              <p>
-                Deploy, configure, and manage your smart contracts from the
-                dashboard.
-              </p>
+              <div className="sub-page">
+                
+                <div className="page-header">
+                    <div className="img"></div>
+                    <div className="head-content container-fluid">
+                        <div className="container">
+                            <h1 className="page-title">ETH - BSC Bridge</h1>
+                           
+                            <div className="breadcrumb">
+                                <a href="https://osean.online">Home</a> / 
+                                <a className="current">Bridge</a>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
             </div>
-          </a>
+    <ChakraProvider>
+    
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop:"70px" }}>
+  <Card style={{ maxWidth: "600px" }}>
+    <Flex justify="space-between" alignItems="flex-start" width="100%">
+      <Box flex="1" m={4}>
+        <form>
+          <h4>Select your Route</h4>
+        <Select style={{ width: "500px"}}
+    value={String(selectedChain)}
+    onChange={(e) => setSelectedChain(e.target.value)}
+>
+  <option value="binance">Binance to Ethereum</option>
+  <option value="polygon">Polygon</option>
+</Select>
+          
+          
+        </form>
+      </Box>
+    </Flex>
+  </Card>
+</div>
+</ChakraProvider> 
 
-          <a
-            href="https://thirdweb.com/templates"
-            className={styles.card}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              src="/images/templates-preview.png"
-              alt="Placeholder preview of templates"
-              width={300}
-              height={200}
-            />
-            <div className={styles.cardText}>
-              <h2 className={styles.gradientText3}>Templates ➜</h2>
-              <p>
-                Discover and clone template projects showcasing thirdweb
-                features.
-              </p>
-            </div>
-          </a>
-        </div>
+      
+      <div style={{marginTop:"20px", marginBottom:"50px"}}>
+      <BridgeVault />
+      
+      <div style={{marginTop:"50px", marginBottom:"50px"}}>
+      
       </div>
-    </main>
+      </div>
+      
+    </Container>
+    
   );
 };
 
