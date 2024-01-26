@@ -7,6 +7,7 @@ import ChainContext from "../cost/chain";
 import { Loading } from "./loading"
 import Link from "next/link";
 import BridgeVault from "../components/bridgeVault";
+import BridgeEth from "../components/bridgeEth";
 
 
 const Home: NextPage = () => {
@@ -61,38 +62,36 @@ const Home: NextPage = () => {
                     </div>
                 </div>
             </div>
-    <ChakraProvider>
-    
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop:"70px" }}>
-  <Card style={{ maxWidth: "600px" }}>
-    <Flex justify="space-between" alignItems="flex-start" width="100%">
-      <Box flex="1" m={4}>
-        <form>
-          <h4>Select your Route</h4>
-        <Select style={{ width: "500px"}}
-    value={String(selectedChain)}
-    onChange={(e) => setSelectedChain(e.target.value)}
->
-  <option value="binance">Binance to Ethereum</option>
-  <option value="polygon">Polygon</option>
-</Select>
-          
-          
-        </form>
-      </Box>
-    </Flex>
-  </Card>
-</div>
-</ChakraProvider> 
+            <ChakraProvider>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop:"70px" }}>
+            <Card style={{ maxWidth: "600px" }}>
+              <Flex justify="space-between" alignItems="flex-start" width="100%">
+                <Box flex="1" m={4}>
+                  <form>
+                    <h4>Select your Route</h4>
+                    <Select style={{ maxWidth: "600px", }}
+                      value={String(selectedChain)}
+                      onChange={(e) => setSelectedChain(e.target.value)}
+                    >
+                      <option value="binance">Binance to Ethereum</option>
+                      <option value="polygon">Ethereum to Binance</option>
+                    </Select>
+                  </form>
+                </Box>
+              </Flex>
+            </Card>
+          </div>
+        </ChakraProvider>
 
-      
-      <div style={{marginTop:"20px", marginBottom:"50px"}}>
-      <BridgeVault />
+        <div style={{ marginTop: "20px", marginBottom: "50px" }}>
+          {selectedChain === "binance" && <BridgeVault />}
+          {selectedChain === "polygon" && <BridgeEth />}
+        </div>
       
       <div style={{marginTop:"50px", marginBottom:"50px"}}>
       
       </div>
-      </div>
+      
       
     </Container>
     
