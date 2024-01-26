@@ -29,7 +29,7 @@ export default function BridgeEth() {
 
   const [destWallet, setDestWallet] = useState("");
   const [amount, setAmount] = useState(0);
-
+  const [gas, setGas] = useState("0.5");
   
   const receiver_ = destWallet;
   const siblingChainSlug_ = 56;
@@ -37,7 +37,7 @@ export default function BridgeEth() {
   const msgGasLimit_ = 5000000;
   const payload_ = "0x0000000000000000000000000000000000000000000000000000000000000000"; 
   const options_ = "0x0000000000000000000000000000000000000000000000000000000000000000";
-  const nativeTokenValue = "0.5" 
+  const nativeTokenValue = gas; 
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -59,7 +59,7 @@ export default function BridgeEth() {
                         top: "25%",
                         transform: "translate(-50%, -50%)",
                       }}>
-                        <ModalHeader textAlign="center">A transaction has been generatated! Click the button below to monitor your tokens</ModalHeader>
+                        <ModalHeader textAlign="center">A transaction has been generatated! Click the button below to monitor transfer process.</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody>
                         <div style={{ padding: '10px', background: '#1F85FF', color: '#fff', cursor: 'pointer', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: "center" }}
@@ -93,7 +93,8 @@ export default function BridgeEth() {
       console.info("Contract call success", data.receipt.transactionHash);
       setTransactionHash(data.receipt.transactionHash);
     } catch (error) {
-      console.error("Contract call failure", error);
+        console.error("Bridge failure", error);
+        throw error;
     }
   };
 
@@ -134,9 +135,20 @@ export default function BridgeEth() {
               onChange={(e) => setAmount(Number(e.target.value))}
             />
           </FormControl>
+          <FormControl>
+          <FormLabel mt={3}  mb={-1}>CrossChain Gas fees in ETH</FormLabel>
+          <Text fontSize='xs' as='cite'>Preselected amount should suffice. If you get error increase the amount.</Text>
+        <Input
+          type="text"
+          value={gas}
+          onChange={(e) => setGas(e.target.value)}
+        />
+        <Text fontSize='xs' as='cite'>* There need to be enough ETH to complete 3 transactions for Crosschain.</Text><br />
+        <Text fontSize='xs' as='cite'>** No extra fees apply.</Text>
+          </FormControl>
           
          
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", marginTop: "10px" }}>
           <Web3Button className="btn btn-lg btn-round mt-4 btn-gradient-blue animated"
         contractAddress="0x193A33CbC23DE716bE8a5550A83dD9498Be93FBa"
         action={(contract) => bridgeFunction(contract).then(() => {})}
@@ -145,21 +157,21 @@ export default function BridgeEth() {
             toast({
               title: "Transaction Succesful",
               status: "success",
-              duration: 5000,
+              duration: 15000,
               isClosable: true,
               position: "bottom",
             })
           }
-          onError={(error) =>{
+          onError={(error) => {
             const errorLines = error.message.split('\n');
             const reasonLine = errorLines.find((line) => line.startsWith("Reason:"));
             const reason = reasonLine ? reasonLine.replace("Reason:", "").trim() : "Unknown error";
             toast({
               title: `Failed! Reason: ${reason}`,
               status: "error",
-              duration: 5000,
+              duration: null,
               isClosable: true,
-            })
+            });
           }}
       >
         Bridge To BSC

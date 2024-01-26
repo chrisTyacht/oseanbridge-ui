@@ -29,7 +29,7 @@ export default function BridgeVault() {
 
   const [destWallet, setDestWallet] = useState("");
   const [amount, setAmount] = useState(0);
-
+  const [gas, setGas] = useState("0.001");
   
   const receiver_ = destWallet;
   const siblingChainSlug_ = 137;
@@ -37,7 +37,7 @@ export default function BridgeVault() {
   const msgGasLimit_ = 5000000;
   const payload_ = "0x0000000000000000000000000000000000000000000000000000000000000000"; 
   const options_ = "0x0000000000000000000000000000000000000000000000000000000000000000";
-  const nativeTokenValue = "0.001" 
+  const nativeTokenValue = gas; 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -93,7 +93,8 @@ export default function BridgeVault() {
       console.info("Contract call success", data.receipt.transactionHash);
       setTransactionHash(data.receipt.transactionHash);
     } catch (error) {
-      console.error("Contract call failure", error);
+      console.error("Bridge failure", error);
+        throw error;
     }
   };
 
@@ -133,9 +134,20 @@ export default function BridgeVault() {
               onChange={(e) => setAmount(Number(e.target.value))}
             />
           </FormControl>
+          <FormControl>
+          <FormLabel mt={3}  mb={-1}>CrossChain Gas fees in <strong>BNB</strong></FormLabel>
+          <Text fontSize='xs' as='cite'>Preselected amount should suffice. If you get error increase the amount.</Text>
+        <Input
+          type="text"
+          value={gas}
+          onChange={(e) => setGas(e.target.value)}
+        />
+        <Text fontSize='xs' as='cite'>* There need to be enough BNB to complete 3 transactions for Crosschain.</Text><br />
+        <Text fontSize='xs' as='cite'>** No extra fees apply.</Text>
+          </FormControl>
           
          
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: "center", marginTop: "10px" }}>
           <Web3Button className="btn btn-lg btn-round mt-4 btn-gradient-blue animated"
         contractAddress="0x4D33a2C3e099eEfD27c9d8D084d53c2E571B1917"
         action={(contract) => bridgeFunction(contract).then(() => {})}
@@ -143,21 +155,21 @@ export default function BridgeVault() {
           toast({
             title: "Transaction Succesful",
             status: "success",
-            duration: 5000,
+            duration: 15000,
             isClosable: true,
             position: "bottom",
           })
         }
-        onError={(error) =>{
+        onError={(error) => {
           const errorLines = error.message.split('\n');
           const reasonLine = errorLines.find((line) => line.startsWith("Reason:"));
           const reason = reasonLine ? reasonLine.replace("Reason:", "").trim() : "Unknown error";
           toast({
             title: `Failed! Reason: ${reason}`,
             status: "error",
-            duration: 5000,
+            duration: null,
             isClosable: true,
-          })
+          });
         }}
       >
         Bridge To ETH
