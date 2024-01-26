@@ -62,7 +62,7 @@ export default function BridgeVault() {
                         <ModalCloseButton />
                         <ModalBody>
                         <div style={{ padding: '10px', background: '#1F85FF', color: '#fff', cursor: 'pointer', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: "center" }}
-                            onClick={() => { window.open(`https://prod.dlapi.socket.tech/messages-from-tx?srcChainSlug=137&srcTxHash=${transactionHash}`, '_blank'); onClose(); }}
+                            onClick={() => { window.open(`https://prod.dlapi.socket.tech/messages-from-tx?srcChainSlug=56&srcTxHash=${transactionHash}`, '_blank'); onClose(); }}
                         >
                             Click here to view details
                         </div>
