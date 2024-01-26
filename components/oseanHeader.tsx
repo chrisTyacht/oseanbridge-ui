@@ -138,7 +138,7 @@ return(
                 data-animation-delay="1.4s"
               >
                 <a className="nav-link" href="https://markt.osean.online">
-                  Marketplace
+                  NFTs
                 </a>
               </li>
               <li
@@ -155,8 +155,17 @@ return(
                 data-animation="fadeInDown"
                 data-animation-delay="1.4s"
               >
+                <a className="nav-link" href="https://bridge.osean.online">
+                  Bridge
+                </a>
+              </li>
+              <li
+                className="nav-item animated"
+                data-animation="fadeInDown"
+                data-animation-delay="1.4s"
+              >
                 <a className="nav-link" href="https://club.osean.online">
-                  NFT Club
+                  Club
                 </a>
               </li>
               <li
