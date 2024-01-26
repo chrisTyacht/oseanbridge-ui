@@ -1,4 +1,5 @@
-## OSEAN bridge UI to use with Socket.tech bridge contracts SuperTokenVault and SuperToken
+## OSEAN bridge UI 
+To use with Socket.tech bridge contracts SuperTokenVault and SuperToken. 
 
 ## Getting Started
 
