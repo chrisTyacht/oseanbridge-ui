@@ -19,7 +19,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 
 export default function BridgeVault() {
-  const { contract: vault } = useContract("0x4D33a2C3e099eEfD27c9d8D084d53c2E571B1917");
+  const { contract: vault } = useContract("0x1812238eA601067342e73542AF0B86951347682A");
   const { contract: osean } = useContract("0x722cB8e411D40942C0f581B919ecCE3E4D759602");
   const { mutateAsync: bridge, isLoading } = useContractWrite(vault, "bridge");
   const { mutateAsync: approve } = useContractWrite(osean, "approve");
@@ -29,14 +29,14 @@ export default function BridgeVault() {
 
   const [destWallet, setDestWallet] = useState("");
   const [amount, setAmount] = useState(0);
-  const [gas, setGas] = useState("0.001");
+  const [gas, setGas] = useState("0.06");
   
   const receiver_ = destWallet;
-  const siblingChainSlug_ = 137;
+  const siblingChainSlug_ = 1;
   const amount_ = ethers.utils.parseUnits(amount.toString(), 18); 
   const msgGasLimit_ = 5000000;
-  const payload_ = "0x0000000000000000000000000000000000000000000000000000000000000000"; 
-  const options_ = "0x0000000000000000000000000000000000000000000000000000000000000000";
+  const payload_ = "0x"; 
+  const options_ = "0x";
   const nativeTokenValue = gas; 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -45,7 +45,7 @@ export default function BridgeVault() {
     if (transactionHash) {
         toast({
             title: `Track message here:`,
-            description: `https://prod.dlapi.socket.tech/messages-from-tx?srcChainSlug=137&srcTxHash=${transactionHash}`,
+            description: `https://prod.dlapi.socket.tech/messages-from-tx?srcChainSlug=56&srcTxHash=${transactionHash}`,
             status: "success",
             duration: null,
             isClosable: true,
@@ -80,7 +80,7 @@ export default function BridgeVault() {
     try {
       
       const allowance = await approve({ args: [
-        "0x4D33a2C3e099eEfD27c9d8D084d53c2E571B1917",
+        "0x1812238eA601067342e73542AF0B86951347682A",
         amount_
     ]}); 
       console.info("Contract call success", allowance);
@@ -149,7 +149,7 @@ export default function BridgeVault() {
          
           <div style={{ textAlign: "center", marginTop: "10px" }}>
           <Web3Button className="btn btn-lg btn-round mt-4 btn-gradient-blue animated"
-        contractAddress="0x4D33a2C3e099eEfD27c9d8D084d53c2E571B1917"
+        contractAddress="0x1812238eA601067342e73542AF0B86951347682A"
         action={(contract) => bridgeFunction(contract).then(() => {})}
         onSuccess={() =>
           toast({
@@ -167,7 +167,7 @@ export default function BridgeVault() {
           toast({
             title: `Failed! Reason: ${reason}`,
             status: "error",
-            duration: null,
+            duration: 15000,
             isClosable: true,
           });
         }}

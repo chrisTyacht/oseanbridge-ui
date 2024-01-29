@@ -17,10 +17,9 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import React from "react";
-import { BSC } from "../cost/addresses";
 
 export default function BridgeEth() {
-  const { contract: osean } = useContract("0x193A33CbC23DE716bE8a5550A83dD9498Be93FBa");
+  const { contract: osean } = useContract("0x7FAB2Eb1BB9257349e30193a00d9656B2e5E9E95");
   const { mutateAsync: bridge, isLoading } = useContractWrite(osean, "bridge");
   const { mutateAsync: approve } = useContractWrite(osean, "approve");
   const address = useAddress();
@@ -29,14 +28,14 @@ export default function BridgeEth() {
 
   const [destWallet, setDestWallet] = useState("");
   const [amount, setAmount] = useState(0);
-  const [gas, setGas] = useState("0.5");
+  const [gas, setGas] = useState("0.00015");
   
   const receiver_ = destWallet;
   const siblingChainSlug_ = 56;
   const amount_ = ethers.utils.parseUnits(amount.toString(), 18); 
-  const msgGasLimit_ = 5000000;
-  const payload_ = "0x0000000000000000000000000000000000000000000000000000000000000000"; 
-  const options_ = "0x0000000000000000000000000000000000000000000000000000000000000000";
+  const msgGasLimit_ = 500000;
+  const payload_ = "0x"; 
+  const options_ = "0x";
   const nativeTokenValue = gas; 
 
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -46,7 +45,7 @@ export default function BridgeEth() {
     if (transactionHash) {
         toast({
             title: `Track message here:`,
-            description: `https://prod.dlapi.socket.tech/messages-from-tx?srcChainSlug=137&srcTxHash=${transactionHash}`,
+            description: `https://prod.dlapi.socket.tech/messages-from-tx?srcChainSlug=1&srcTxHash=${transactionHash}`,
             status: "success",
             duration: null,
             isClosable: true,
@@ -63,7 +62,7 @@ export default function BridgeEth() {
                         <ModalCloseButton />
                         <ModalBody>
                         <div style={{ padding: '10px', background: '#1F85FF', color: '#fff', cursor: 'pointer', borderRadius: '8px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)', textAlign: "center" }}
-                            onClick={() => { window.open(`https://prod.dlapi.socket.tech/messages-from-tx?srcChainSlug=137&srcTxHash=${transactionHash}`, '_blank'); onClose(); }}
+                            onClick={() => { window.open(`https://prod.dlapi.socket.tech/messages-from-tx?srcChainSlug=1&srcTxHash=${transactionHash}`, '_blank'); onClose(); }}
                         >
                             Click here to view details
                         </div>
@@ -150,7 +149,7 @@ export default function BridgeEth() {
          
           <div style={{ textAlign: "center", marginTop: "10px" }}>
           <Web3Button className="btn btn-lg btn-round mt-4 btn-gradient-blue animated"
-        contractAddress="0x193A33CbC23DE716bE8a5550A83dD9498Be93FBa"
+        contractAddress="0x7FAB2Eb1BB9257349e30193a00d9656B2e5E9E95"
         action={(contract) => bridgeFunction(contract).then(() => {})}
 
         onSuccess={() =>
@@ -169,7 +168,7 @@ export default function BridgeEth() {
             toast({
               title: `Failed! Reason: ${reason}`,
               status: "error",
-              duration: null,
+              duration: 15000,
               isClosable: true,
             });
           }}

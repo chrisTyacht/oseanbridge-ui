@@ -74,7 +74,7 @@ const Home: NextPage = () => {
                       onChange={(e) => setSelectedChain(e.target.value)}
                     >
                       <option value="binance">Binance to Ethereum</option>
-                      <option value="polygon">Ethereum to Binance</option>
+                      <option value="ethereum">Ethereum to Binance</option>
                     </Select>
                   </form>
                 </Box>
@@ -85,10 +85,11 @@ const Home: NextPage = () => {
 
         <div style={{ marginTop: "20px", marginBottom: "50px" }}>
           {selectedChain === "binance" && <BridgeVault />}
-          {selectedChain === "polygon" && <BridgeEth />}
+          {selectedChain === "ethereum" && <BridgeEth />}
         </div>
       
-      <div style={{marginTop:"50px", marginBottom:"50px"}}>
+      <div style={{display: "flex", justifyContent: "center", alignItems: "center", marginTop:"50px", marginBottom:"50px"}}>
+<Text>Powered by </Text> &ensp; <p><a href="https://socket.tech" rel="socket" target="_blank"><Image src="/theme-assets/images/socket.jpg" alt="socket" /></a></p>
       
       </div>
       
