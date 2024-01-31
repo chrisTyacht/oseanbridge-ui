@@ -17,19 +17,33 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import React from "react";
+import Web3 from "web3";
 
 export default function BridgeVault() {
   const { contract: vault } = useContract("0x1812238eA601067342e73542AF0B86951347682A");
   const { contract: osean } = useContract("0x722cB8e411D40942C0f581B919ecCE3E4D759602");
+  const { contract: socket } = useContract("0xf6a53DC23497046623e6cfA5C6632D2f066E35f2");
   const { mutateAsync: bridge, isLoading } = useContractWrite(vault, "bridge");
   const { mutateAsync: approve } = useContractWrite(osean, "approve");
+   
+
+  const web3 = new Web3(window.ethereum);
+
+  const fees = useContractRead(socket, "getMinFees", [1, 500000, 0]);
+  const feeValue = fees.data ? web3.utils.fromWei(fees.data._hex, 'ether') : "N/A";
+  
+  const roundedFeeValue = fees.data ? (Math.ceil(Number(feeValue) * 100000) / 100000).toFixed(3) : "N/A";
+  
+  console.log("Current fees in Ether (rounded up to 5 decimal places):", roundedFeeValue);
+  
   const address = useAddress();
   const toast = useToast();
+  
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
-
   const [destWallet, setDestWallet] = useState("");
   const [amount, setAmount] = useState(0);
-  const [gas, setGas] = useState("0.06");
+  const [gas, setGas] = useState(``);
+  
   
   const receiver_ = destWallet;
   const siblingChainSlug_ = 1;
@@ -39,6 +53,8 @@ export default function BridgeVault() {
   const options_ = "0x";
   const nativeTokenValue = gas; 
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  
 
   useEffect(() => {
     // Trigger toast on transactionHash change
@@ -142,8 +158,8 @@ export default function BridgeVault() {
           value={gas}
           onChange={(e) => setGas(e.target.value)}
         />
-        <Text fontSize='xs' as='cite'>* There need to be enough BNB to complete 3 transactions for Crosschain.</Text><br />
-        <Text fontSize='xs' as='cite'>** No extra fees apply.</Text>
+        <Text fontSize='xs' as='cite'>* Current gas fees value for all transactions: <strong>{roundedFeeValue} BNB</strong></Text><br />
+        <Text fontSize='xs' as='cite'>** The fees include gas cost for all 3 necessary transactions.</Text>
           </FormControl>
           
          
