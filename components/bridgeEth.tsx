@@ -19,7 +19,7 @@ import { useState, useEffect } from "react";
 import React from "react";
 
 export default function BridgeEth() {
-  const { contract: osean } = useContract("0x7FAB2Eb1BB9257349e30193a00d9656B2e5E9E95");
+  const { contract: osean } = useContract("0x50d5118Fb90D572B9d42ba65E0addC4900867809");
   const { mutateAsync: bridge, isLoading } = useContractWrite(osean, "bridge");
   const { mutateAsync: approve } = useContractWrite(osean, "approve");
   const address = useAddress();
@@ -149,7 +149,7 @@ export default function BridgeEth() {
          
           <div style={{ textAlign: "center", marginTop: "10px" }}>
           <Web3Button className="btn btn-lg btn-round mt-4 btn-gradient-blue animated"
-        contractAddress="0x7FAB2Eb1BB9257349e30193a00d9656B2e5E9E95"
+        contractAddress="0x50d5118Fb90D572B9d42ba65E0addC4900867809"
         action={(contract) => bridgeFunction(contract).then(() => {})}
 
         onSuccess={() =>
