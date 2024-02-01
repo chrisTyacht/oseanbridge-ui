@@ -17,18 +17,32 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import React from "react";
+import Web3 from "web3";
 
 export default function BridgeEth() {
-  const { contract: osean } = useContract("0x7FAB2Eb1BB9257349e30193a00d9656B2e5E9E95");
+  const { contract: osean } = useContract("0x50d5118Fb90D572B9d42ba65E0addC4900867809");
+  const { contract: socket } = useContract("0x37091ade7C4E1A914D3155449e25eE91DA08EbE4");
   const { mutateAsync: bridge, isLoading } = useContractWrite(osean, "bridge");
   const { mutateAsync: approve } = useContractWrite(osean, "approve");
   const address = useAddress();
   const toast = useToast();
+
+  const web3 = new Web3(window.ethereum);
+
+  const fees = useContractRead(socket, "getMinFees", [56, 500000, 0]);
+  const feeValue = fees.data ? web3.utils.fromWei(fees.data._hex, 'ether') : "N/A";
+  
+  const roundedFeeValue = fees.data ? (Math.ceil(Number(feeValue) * 100000) / 100000).toFixed(5) : "N/A";
+  
+  console.log("Current fees in Ether (rounded up to 5 decimal places):", roundedFeeValue);
+  
+
+
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
 
   const [destWallet, setDestWallet] = useState("");
   const [amount, setAmount] = useState(0);
-  const [gas, setGas] = useState("0.00015");
+  const [gas, setGas] = useState("");
   
   const receiver_ = destWallet;
   const siblingChainSlug_ = 56;
@@ -142,14 +156,14 @@ export default function BridgeEth() {
           value={gas}
           onChange={(e) => setGas(e.target.value)}
         />
-        <Text fontSize='xs' as='cite'>* There need to be enough ETH to complete 3 transactions for Crosschain.</Text><br />
-        <Text fontSize='xs' as='cite'>** No extra fees apply.</Text>
+        <Text fontSize='xs' as='cite'>* Current gas fees value for all transactions: <strong>{roundedFeeValue} BNB</strong></Text><br />
+        <Text fontSize='xs' as='cite'>** The fees include gas cost for all 3 necessary transactions.</Text>
           </FormControl>
           
          
           <div style={{ textAlign: "center", marginTop: "10px" }}>
           <Web3Button className="btn btn-lg btn-round mt-4 btn-gradient-blue animated"
-        contractAddress="0x7FAB2Eb1BB9257349e30193a00d9656B2e5E9E95"
+        contractAddress="0x50d5118Fb90D572B9d42ba65E0addC4900867809"
         action={(contract) => bridgeFunction(contract).then(() => {})}
 
         onSuccess={() =>
