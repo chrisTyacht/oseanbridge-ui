@@ -11,7 +11,6 @@ import Head from "next/head";
 import ChainContext from "../cost/chain";
 import { OseanFooter } from "../components/oseanFooter";
 import { OseanHeader, OseanHeaderLinks } from "../components/oseanHeader";
-import { BSC, ETH } from "../cost/addresses";
 import { useState } from "react";
 
 
