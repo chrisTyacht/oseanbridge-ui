@@ -1,7 +1,5 @@
 import { Web3Button, useContract, useContractWrite, useContractRead, useAddress } from "@thirdweb-dev/react";
-import { BigNumber } from "ethers";
 import { ethers } from "ethers";
-import  web3  from "web3";
 import {
   Flex,
   Card,
@@ -12,21 +10,22 @@ import {
   FormLabel,
   useToast,
   ChakraProvider,
-  Image,
-  Center, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure
+  Image, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, useDisclosure
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import React from "react";
 import Web3 from "web3";
 
 export default function BridgeVault() {
+  
+  //@dev get contracts and functions
   const { contract: vault } = useContract("0x1812238eA601067342e73542AF0B86951347682A");
   const { contract: osean } = useContract("0x722cB8e411D40942C0f581B919ecCE3E4D759602");
   const { contract: socket } = useContract("0xf6a53DC23497046623e6cfA5C6632D2f066E35f2");
   const { mutateAsync: bridge, isLoading } = useContractWrite(vault, "bridge");
   const { mutateAsync: approve } = useContractWrite(osean, "approve");
    
-
+  //@dev get current gas prices and fees required for Bridge
   const web3 = new Web3(window.ethereum);
 
   const fees = useContractRead(socket, "getMinFees", [1, 500000, 0]);
@@ -39,23 +38,24 @@ export default function BridgeVault() {
   const address = useAddress();
   const toast = useToast();
   
+  //@dev set values from form
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
   const [destWallet, setDestWallet] = useState("");
   const [amount, setAmount] = useState(0);
-  const [gas, setGas] = useState(``);
+  const [gas, setGas] = useState("");
   
-  
+  //@dev set values in bridge tx
   const receiver_ = destWallet;
   const siblingChainSlug_ = 1;
   const amount_ = ethers.utils.parseUnits(amount.toString(), 18); 
-  const msgGasLimit_ = 5000000;
+  const msgGasLimit_ = 500000;
   const payload_ = "0x"; 
   const options_ = "0x";
   const nativeTokenValue = gas; 
-  const { isOpen, onOpen, onClose } = useDisclosure();
-
   
-
+  //@dev popup for monitoring bridge process  
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  
   useEffect(() => {
     // Trigger toast on transactionHash change
     if (transactionHash) {
@@ -91,7 +91,7 @@ export default function BridgeVault() {
         }
   }, [transactionHash, isOpen, onOpen, toast]);
   
-
+  //@dev execute Bridge function
   const bridgeFunction = async (contract: any) => {
     try {
       

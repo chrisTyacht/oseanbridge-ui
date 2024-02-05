@@ -28,20 +28,7 @@ const Home: NextPage = () => {
     </div> 
     )
   }
-
- /* if (!address) {
-    return (
-      <Container maxW={"1200px"}>
-        <Flex h={"50vh"} justifyContent={"center"} alignItems={"center"}>
-          <div>
-            <h1>Please Connect a Wallet</h1>
-          </div>
-        </Flex>
-      </Container>
-    );
-  } */
   
-
   return (
     <Container maxW={"100%"}>
 

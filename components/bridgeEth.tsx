@@ -20,6 +20,8 @@ import React from "react";
 import Web3 from "web3";
 
 export default function BridgeEth() {
+
+  //@dev get current gas prices and fees required for Bridge
   const { contract: osean } = useContract("0x50d5118Fb90D572B9d42ba65E0addC4900867809");
   const { contract: socket } = useContract("0x37091ade7C4E1A914D3155449e25eE91DA08EbE4");
   const { mutateAsync: bridge, isLoading } = useContractWrite(osean, "bridge");
@@ -27,6 +29,7 @@ export default function BridgeEth() {
   const address = useAddress();
   const toast = useToast();
 
+  //@dev get current gas prices and fees required for Bridge
   const web3 = new Web3(window.ethereum);
 
   const fees = useContractRead(socket, "getMinFees", [56, 500000, 0]);
@@ -37,13 +40,13 @@ export default function BridgeEth() {
   console.log("Current fees in Ether (rounded up to 5 decimal places):", roundedFeeValue);
   
 
-
+  //@dev set values from form
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
-
   const [destWallet, setDestWallet] = useState("");
   const [amount, setAmount] = useState(0);
   const [gas, setGas] = useState("");
   
+  //@dev set values in bridge tx
   const receiver_ = destWallet;
   const siblingChainSlug_ = 56;
   const amount_ = ethers.utils.parseUnits(amount.toString(), 18); 
@@ -52,6 +55,7 @@ export default function BridgeEth() {
   const options_ = "0x";
   const nativeTokenValue = gas; 
 
+  //@dev popup for monitoring bridge process
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
@@ -89,6 +93,7 @@ export default function BridgeEth() {
         }
   }, [transactionHash, isOpen, onOpen, toast]);
 
+  //@dev execute Bridge function
   const bridgeFunction = async (contract: any) => {
     try {
       
